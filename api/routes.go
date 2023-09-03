@@ -7,7 +7,6 @@ import (
 )
 
 func SetupRouter(cfg *config.Configuration) *gin.Engine {
-	authBasePath := cfg.AuthServiceUrl + "/api/auth-service"
 
 	r := gin.Default()
 
@@ -15,10 +14,11 @@ func SetupRouter(cfg *config.Configuration) *gin.Engine {
 	{
 		auth := api.Group("/auth")
 		{
-			auth.POST("/register", handlers.ProxyRequest(authBasePath+"/register"))
-			auth.POST("/login", handlers.ProxyRequest(authBasePath+"/login"))
-			auth.POST("/refresh", handlers.ProxyRequest(authBasePath+"/refresh"))
-			auth.POST("/validate", handlers.ProxyRequest(authBasePath+"/validate"))
+			auth.GET("/docs/*any", handlers.ProxyRequest(cfg, "auth"))
+			auth.POST("/register", handlers.ProxyRequest(cfg, "auth"))
+			auth.POST("/login", handlers.ProxyRequest(cfg, "auth"))
+			auth.POST("/refresh", handlers.ProxyRequest(cfg, "auth"))
+			auth.POST("/validate", handlers.ProxyRequest(cfg, "auth"))
 		}
 	}
 

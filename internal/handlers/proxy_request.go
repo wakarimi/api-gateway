@@ -1,14 +1,24 @@
 package handlers
 
 import (
+	"api-gateway/internal/config"
 	"api-gateway/internal/handlers/types"
 	"github.com/gin-gonic/gin"
 	"io"
 	"net/http"
+	"strings"
 )
 
-func ProxyRequest(url string) func(c *gin.Context) {
+func BuildProxyUrl(cfg *config.Configuration, serviceKey string, originalPath string) string {
+	if serviceConfig, exists := cfg.ProxyConfiguration.Services[serviceKey]; exists {
+		return serviceConfig.BaseUrl + serviceConfig.PathPrefix + strings.TrimPrefix(originalPath, "/api/"+serviceKey)
+	}
+	return ""
+}
+
+func ProxyRequest(cfg *config.Configuration, serviceKey string) func(c *gin.Context) {
 	return func(c *gin.Context) {
+		url := BuildProxyUrl(cfg, serviceKey, c.Request.URL.Path)
 
 		req, err := http.NewRequest(c.Request.Method, url, c.Request.Body)
 		if err != nil {

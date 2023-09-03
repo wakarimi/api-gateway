@@ -15,7 +15,12 @@ type HttpServerConfiguration struct {
 }
 
 type ProxyConfiguration struct {
-	AuthServiceUrl string
+	Services map[string]ServiceConfig
+}
+
+type ServiceConfig struct {
+	BaseUrl    string
+	PathPrefix string
 }
 
 func LoadConfiguration() (config *Configuration, err error) {
@@ -27,7 +32,12 @@ func LoadConfiguration() (config *Configuration, err error) {
 			Port: viper.GetString("HTTP_SERVER_PORT"),
 		},
 		ProxyConfiguration{
-			AuthServiceUrl: viper.GetString("AUTH_SERVICE_URL"),
+			Services: map[string]ServiceConfig{
+				"auth": {
+					BaseUrl:    viper.GetString("AUTH_SERVICE_URL"),
+					PathPrefix: "/api/auth-service",
+				},
+			},
 		},
 	}
 
