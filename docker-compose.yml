@@ -1,0 +1,8 @@
+version: "3"
+
+services:
+  wakarimi-api-gateway:
+    container_name: wakarimi-api-gateway
+    build:
+      context: .
+    image: wakarimi-api-gateway
