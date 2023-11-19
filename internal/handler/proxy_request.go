@@ -19,7 +19,17 @@ func (h Handler) BuildProxyUrl(endpoint string) string {
 func (h Handler) ProxyRequest(endpoint string, role *string) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		log.Debug().Str("servicePath", h.ServicePath).Msg("Request execution")
+		params := c.Params
+		queryParams := c.Request.URL.Query()
+
 		url := h.BuildProxyUrl(endpoint)
+
+		for _, p := range params {
+			url = strings.Replace(url, ":"+p.Key, p.Value, 1)
+		}
+		if len(queryParams) > 0 {
+			url += "?" + queryParams.Encode()
+		}
 
 		req, err := http.NewRequest(c.Request.Method, url, c.Request.Body)
 		if err != nil {
