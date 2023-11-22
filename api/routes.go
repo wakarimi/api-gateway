@@ -53,7 +53,7 @@ func SetupRouter(ac *context.AppContext) (r *gin.Engine) {
 			musicFiles.POST("/dirs/scan", musicFilesHandler.ProxyRequest("/dirs/scan", util.StrPtr("ADMIN")))
 
 			musicFiles.GET("/audio-files/:audioFileId", musicFilesHandler.ProxyRequest("/audio-files/:audioFileId", util.StrPtr("USER")))
-			musicFiles.GET("/audio-files", musicFilesHandler.ProxyRequest("", util.StrPtr("USER")))
+			musicFiles.GET("/audio-files", musicFilesHandler.ProxyRequest("/audio-files", util.StrPtr("USER")))
 			musicFiles.GET("/audio-files/:audioFileId/download", musicFilesHandler.ProxyRequest("/audio-files/:audioFileId/download", util.StrPtr("USER")))
 			musicFiles.GET("/audio-files/:audioFileId/cover", musicFilesHandler.ProxyRequest("/audio-files/:audioFileId/cover", util.StrPtr("USER")))
 			musicFiles.GET("/audio-files/sha256/:sha256", musicFilesHandler.ProxyRequest("/audio-files/sha256/:sha256", util.StrPtr("USER")))
@@ -66,6 +66,9 @@ func SetupRouter(ac *context.AppContext) (r *gin.Engine) {
 		musicMetadata := api.Group("/music-metadata")
 		{
 			musicMetadata.GET("/docs/*any", musicMetadataHandler.ProxyRequest("/docs/*any", nil))
+
+			musicMetadata.GET("/songs", musicMetadataHandler.ProxyRequest("/songs", util.StrPtr("USER")))
+			musicMetadata.GET("/songs/:songId", musicMetadataHandler.ProxyRequest("/songs/:songId", util.StrPtr("USER")))
 
 			musicMetadata.GET("/albums", musicMetadataHandler.ProxyRequest("/albums", util.StrPtr("USER")))
 			musicMetadata.GET("/albums/:albumId", musicMetadataHandler.ProxyRequest("/albums/:albumId", util.StrPtr("USER")))
