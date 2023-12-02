@@ -26,6 +26,7 @@ func SetupRouter(ac *context.AppContext) (r *gin.Engine) {
 	authHandler := handler.NewHandler(tokenClient, ac.Config.HTTPServer.Other.AuthURL)
 	musicFilesHandler := handler.NewHandler(tokenClient, ac.Config.HTTPServer.Other.MusicFileURL)
 	musicMetadataHandler := handler.NewHandler(tokenClient, ac.Config.HTTPServer.Other.MusicMetadataURL)
+	musicPlaybackHandler := handler.NewHandler(tokenClient, ac.Config.HTTPServer.Other.MusicPlaybackURL)
 
 	api := r.Group("/api")
 	{
@@ -84,6 +85,13 @@ func SetupRouter(ac *context.AppContext) (r *gin.Engine) {
 			musicMetadata.GET("/genres/:genreId", musicMetadataHandler.ProxyRequest("/genres/:genreId", util.StrPtr("USER")))
 			musicMetadata.GET("/genres/:genreId/songs", musicMetadataHandler.ProxyRequest("/genres/:genreId/songs", util.StrPtr("USER")))
 			musicMetadata.GET("/genres/:genreId/covers", musicMetadataHandler.ProxyRequest("/genres/:genreId/covers", util.StrPtr("USER")))
+		}
+
+		musicPlayback := api.Group("/music-playback")
+		{
+			musicPlayback.GET("/docs/*any", musicPlaybackHandler.ProxyRequest("/docs/*any", nil))
+
+			musicPlayback.GET("/rooms/my", musicPlaybackHandler.ProxyRequest("/rooms/my", util.StrPtr("USER")))
 		}
 	}
 
