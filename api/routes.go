@@ -92,6 +92,11 @@ func SetupRouter(ac *context.AppContext) (r *gin.Engine) {
 			musicPlayback.GET("/docs/*any", musicPlaybackHandler.ProxyRequest("/docs/*any", nil))
 
 			musicPlayback.GET("/rooms/my", musicPlaybackHandler.ProxyRequest("/rooms/my", util.StrPtr("USER")))
+			musicPlayback.POST("/rooms", musicPlaybackHandler.ProxyRequest("/rooms", util.StrPtr("USER")))
+
+			musicPlayback.GET("/rooms/:roomId/share-code", musicPlaybackHandler.ProxyRequest("/rooms/:roomId/share-code", util.StrPtr("USER")))
+			musicPlayback.POST("/rooms/:roomId/share-code", musicPlaybackHandler.ProxyRequest("/rooms/:roomId/share-code", util.StrPtr("USER")))
+			musicPlayback.DELETE("/rooms/:roomId/share-code", musicPlaybackHandler.ProxyRequest("/rooms/:roomId/share-code", util.StrPtr("USER")))
 		}
 	}
 
