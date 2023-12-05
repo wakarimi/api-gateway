@@ -92,6 +92,7 @@ func SetupRouter(ac *context.AppContext) (r *gin.Engine) {
 			musicPlayback.GET("/docs/*any", musicPlaybackHandler.ProxyRequest("/docs/*any", nil))
 
 			musicPlayback.GET("/rooms/my", musicPlaybackHandler.ProxyRequest("/rooms/my", util.StrPtr("USER")))
+			musicPlayback.POST("/rooms/join", musicPlaybackHandler.ProxyRequest("/rooms/join", util.StrPtr("USER")))
 			musicPlayback.POST("/rooms", musicPlaybackHandler.ProxyRequest("/rooms", util.StrPtr("USER")))
 			musicPlayback.PATCH("/rooms/:roomId/rename", musicPlaybackHandler.ProxyRequest("/rooms/:roomId/rename", util.StrPtr("USER")))
 
