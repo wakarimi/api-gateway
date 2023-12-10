@@ -41,7 +41,7 @@ func SetupRouter(ac *context.AppContext) (r *gin.Engine) {
 			auth.GET("/accounts/me", authHandler.ProxyRequest("/accounts/me", util.StrPtr("USER")))
 			auth.GET("/accounts", authHandler.ProxyRequest("/accounts", util.StrPtr("USER")))
 			auth.POST("/accounts/sign-up", authHandler.ProxyRequest("/accounts/sign-up", nil))
-			auth.POST("/accounts/change-password", authHandler.ProxyRequest("/accounts/change-password", util.StrPtr("USER")))
+			auth.PATCH("/accounts/change-password", authHandler.ProxyRequest("/accounts/change-password", util.StrPtr("USER")))
 			auth.DELETE("/accounts/:accountId", authHandler.ProxyRequest("/accounts/:accountId", util.StrPtr("ADMIN")))
 			auth.POST("/accounts/:accountId/roles", authHandler.ProxyRequest("/accounts/:accountId/roles", util.StrPtr("ADMIN")))
 			auth.DELETE("/accounts/:accountId/roles", authHandler.ProxyRequest("/accounts/:accountId/roles", util.StrPtr("ADMIN")))
