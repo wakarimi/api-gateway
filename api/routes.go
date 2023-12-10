@@ -33,11 +33,18 @@ func SetupRouter(ac *context.AppContext) (r *gin.Engine) {
 		auth := api.Group("/auth")
 		{
 			auth.GET("/docs/*any", authHandler.ProxyRequest("/docs/*any", nil))
-			auth.GET("/accounts/me", authHandler.ProxyRequest("/accounts/me", util.StrPtr("USER")))
-			auth.POST("/register", authHandler.ProxyRequest("/register", nil))
-			auth.POST("/login", authHandler.ProxyRequest("/login", nil))
+			auth.POST("/auth/sign-in", authHandler.ProxyRequest("/auth/sign-in", nil))
+			auth.POST("/auth/sign-out", authHandler.ProxyRequest("/auth/sign-out", util.StrPtr("USER")))
+			auth.POST("/auth/sign-out-all", authHandler.ProxyRequest("/auth/sign-out-all", util.StrPtr("USER")))
 			auth.POST("/tokens/refresh", authHandler.ProxyRequest("/tokens/refresh", nil))
-			auth.POST("/tokens/validate", authHandler.ProxyRequest("/tokens/validate", nil))
+			auth.POST("/tokens/verify", authHandler.ProxyRequest("/tokens/verify", nil))
+			auth.GET("/accounts/me", authHandler.ProxyRequest("/accounts/me", util.StrPtr("USER")))
+			auth.GET("/accounts", authHandler.ProxyRequest("/accounts", util.StrPtr("USER")))
+			auth.POST("/accounts/sign-up", authHandler.ProxyRequest("/accounts/sign-up", nil))
+			auth.POST("/accounts/change-password", authHandler.ProxyRequest("/accounts/change-password", util.StrPtr("USER")))
+			auth.DELETE("/accounts/:accountId", authHandler.ProxyRequest("/accounts/:accountId", util.StrPtr("ADMIN")))
+			auth.POST("/accounts/:accountId/roles", authHandler.ProxyRequest("/accounts/:accountId/roles", util.StrPtr("ADMIN")))
+			auth.DELETE("/accounts/:accountId/roles", authHandler.ProxyRequest("/accounts/:accountId/roles", util.StrPtr("ADMIN")))
 		}
 
 		musicFiles := api.Group("/music-files")
